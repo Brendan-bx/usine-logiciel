@@ -1,0 +1,72 @@
+---
+- name: Create directory structure
+  file:
+    path: "/opt/app/{{ item }}"
+    state: directory
+    mode: "0755"
+  loop:
+    - ""
+    - monitoring/prometheus
+    - monitoring/loki
+    - monitoring/promtail
+    - monitoring/grafana/provisioning/datasources
+    - monitoring/grafana/provisioning/dashboards
+
+# ---- Configuration files ----
+- name: Generate docker-compose.yml
+  template:
+    src: docker-compose.yml.j2
+    dest: /opt/app/docker-compose.yml
+    mode: "0644"
+
+- name: Copy Prometheus config
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/prometheus/prometheus.yml"
+    dest: /opt/app/monitoring/prometheus/prometheus.yml
+
+- name: Copy Loki config
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/loki/loki-config.yml"
+    dest: /opt/app/monitoring/loki/loki-config.yml
+
+- name: Copy Promtail config
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/promtail/promtail-config.yml"
+    dest: /opt/app/monitoring/promtail/promtail-config.yml
+
+- name: Copy Grafana datasources
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/grafana/provisioning/datasources/datasources.yml"
+    dest: /opt/app/monitoring/grafana/provisioning/datasources/datasources.yml
+
+- name: Copy Grafana dashboards provisioning
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/grafana/provisioning/dashboards/dashboards.yml"
+    dest: /opt/app/monitoring/grafana/provisioning/dashboards/dashboards.yml
+
+- name: Copy Grafana dashboard JSON
+  copy:
+    src: "{{ playbook_dir }}/../monitoring/grafana/provisioning/dashboards/app-dashboard.json"
+    dest: /opt/app/monitoring/grafana/provisioning/dashboards/app-dashboard.json
+
+# ---- GHCR login (optionnel) ----
+- name: Login to GHCR
+  shell: >
+    echo "{{ ghcr_token }}" |
+    docker login ghcr.io -u "{{ ghcr_user }}" --password-stdin
+  when: ghcr_token | default('') | length > 0
+  no_log: true
+
+# ---- Deploy ----
+- name: Pull & start all services
+  shell: docker compose pull && docker compose up -d --remove-orphans
+  args:
+    chdir: /opt/app
+
+- name: Show running containers
+  shell: docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+  register: containers
+
+- name: Display containers
+  debug:
+    var: containers.stdout_lines

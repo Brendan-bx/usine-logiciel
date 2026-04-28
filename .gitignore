@@ -1,0 +1,40 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+venv/
+env/
+.env
+
+# Tests & Coverage
+.pytest_cache/
+htmlcov/
+.coverage
+coverage.xml
+test-results.xml
+
+# IDE
+.vscode/
+.idea/
+*.swp
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate*
+terraform/ssh_key.pem
+terraform/.terraform.lock.hcl
+terraform/terraform.tfvars
+
+# Ansible
+ansible/inventory.ini
+ansible/*.retry
+
+# Docker
+*.log
+
+# SonarQube
+.scannerwork/
+
+# OS
+.DS_Store
+Thumbs.db
