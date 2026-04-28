@@ -1,4 +1,4 @@
 project_name   = "devops-tm"
-location       = "West Europe"
+location       = "francecentral"
 vm_size        = "Standard_B2s"
 admin_username = "azureuser"
