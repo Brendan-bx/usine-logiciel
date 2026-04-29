@@ -8,7 +8,7 @@ on:
 jobs:
   # -------- Tests de sécurité --------
   test:
-    name: "🧪 Tests"
+    name: "Tests"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -20,7 +20,7 @@ jobs:
 
   # -------- Build & Push GHCR --------
   build-and-push:
-    name: "🐳 Build & Push"
+    name: "Build & Push"
     needs: test
     runs-on: ubuntu-latest
     permissions:
@@ -55,10 +55,10 @@ jobs:
 
   # -------- Deploy to Azure VM --------
   deploy:
-    name: "🚀 Deploy"
+    name: "Deploy"
     needs: build-and-push
     runs-on: ubuntu-latest
-    continue-on-error: true          # ne bloque pas si les secrets ne sont pas configurés
+    continue-on-error: true
     steps:
       - name: SSH deploy
         uses: appleboy/ssh-action@v1

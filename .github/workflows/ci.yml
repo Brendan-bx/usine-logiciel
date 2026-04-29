@@ -9,7 +9,7 @@ on:
 jobs:
   # -------- Lint --------
   lint:
-    name: "🔍 Lint"
+    name: "Lint"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -21,7 +21,7 @@ jobs:
 
   # -------- Tests --------
   test:
-    name: "🧪 Tests"
+    name: "Tests"
     needs: lint
     runs-on: ubuntu-latest
     steps:
@@ -45,7 +45,7 @@ jobs:
 
   # -------- SonarCloud --------
   sonar:
-    name: "📊 SonarCloud"
+    name: "SonarCloud"
     needs: test
     runs-on: ubuntu-latest
     steps:
