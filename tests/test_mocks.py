@@ -65,3 +65,19 @@ def test_delete_not_found_returns_404(mock_find, client):
     mock_find.return_value = None
     resp = client.delete("/api/tasks/42")
     assert resp.status_code == 404
+
+# ===== MOCK _next_id =====
+
+@patch("app.main._next_id")
+def test_create_task_uses_next_id(mock_next_id, client):
+    """La création doit utiliser _next_id pour générer l'ID."""
+    mock_next_id.return_value = 99
+
+    resp = client.post(
+        "/api/tasks",
+        data=json.dumps({"title": "ID mocké"}),
+        headers=HEADERS,
+    )
+    assert resp.status_code == 201
+    assert resp.get_json()["id"] == 99
+    mock_next_id.assert_called_once()
