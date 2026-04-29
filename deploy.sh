@@ -22,7 +22,7 @@ fi
 info "Subscription : $(az account show --query name -o tsv)"
 
 # ── Variables ──
-GHCR_USER="Brendan-bx"
+GHCR_USER="brendan-bx"
 read -rp "Mot de passe Grafana admin [admin123] : " GRAFANA_PASS
 GRAFANA_PASS=${GRAFANA_PASS:-admin123}
 
