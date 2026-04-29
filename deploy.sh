@@ -41,8 +41,7 @@ info "VM créée : $VM_IP"
 # ── 2. Attente SSH ──
 info "Étape 2/3 — Attente de la VM..."
 for i in $(seq 1 20); do
-  if ssh -i terraform/ssh_key.pem -o StrictHostKeyChecking=no \
-       -o ConnectTimeout=10 "${ADMIN_USER}@${VM_IP}" "echo ok" &>/dev/null; then
+  if ssh -i terraform/ssh_key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${ADMIN_USER}@${VM_IP}" "echo ok" &>/dev/null; then
     break
   fi
   warn "Tentative SSH $i/20..."
