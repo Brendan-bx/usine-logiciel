@@ -1,4 +1,4 @@
 project_name   = "devops-tm"
 location       = "swedencentral"
-vm_size        = "Standard_B2s"
+vm_size        = "Standard_B2ls_v2"
 admin_username = "azureuser"
