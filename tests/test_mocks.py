@@ -39,6 +39,7 @@ def test_get_unknown_task_logs_warning(mock_logger, client):
 
 # ===== MOCK _find_task =====
 
+
 @patch("app.main._find_task")
 def test_get_task_uses_find(mock_find, client):
     """GET /api/tasks/1 doit appeler _find_task(1)."""
@@ -68,6 +69,7 @@ def test_delete_not_found_returns_404(mock_find, client):
 
 # ===== MOCK _next_id =====
 
+
 @patch("app.main._next_id")
 def test_create_task_uses_next_id(mock_next_id, client):
     """La création doit utiliser _next_id pour générer l'ID."""
@@ -81,3 +83,31 @@ def test_create_task_uses_next_id(mock_next_id, client):
     assert resp.status_code == 201
     assert resp.get_json()["id"] == 99
     mock_next_id.assert_called_once()
+
+# ===== MOCK STORAGE =====
+
+
+@patch("app.main.tasks_db", new_callable=lambda: list)
+def test_get_tasks_with_fake_data(mock_db, client):
+    """Injecter des fausses données et vérifier la réponse."""
+    mock_db.extend([
+        {"id": 1, "title": "Fausse tâche A", "description": "", "completed": False},
+        {"id": 2, "title": "Fausse tâche B", "description": "", "completed": True},
+    ])
+
+    resp = client.get("/api/tasks")
+    assert resp.status_code == 200
+    assert resp.get_json()["count"] == 2
+
+
+@patch("app.main.tasks_db", new_callable=lambda: list)
+def test_get_single_fake_task(mock_db, client):
+    """Récupérer une tâche depuis un stockage mocké."""
+    mock_db.append(
+        {"id": 5, "title": "Mocké", "description": "test", "completed": True}
+    )
+
+    resp = client.get("/api/tasks/5")
+    assert resp.status_code == 200
+    assert resp.get_json()["title"] == "Mocké"
+    assert resp.get_json()["completed"] is True
