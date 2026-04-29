@@ -87,27 +87,27 @@ def test_create_task_uses_next_id(mock_next_id, client):
 # ===== MOCK STORAGE =====
 
 
-@patch("app.main.tasks_db", new_callable=lambda: list)
-def test_get_tasks_with_fake_data(mock_db, client):
+def test_get_tasks_with_fake_data(client):
     """Injecter des fausses données et vérifier la réponse."""
-    mock_db.extend([
+    fake_db = [
         {"id": 1, "title": "Fausse tâche A", "description": "", "completed": False},
         {"id": 2, "title": "Fausse tâche B", "description": "", "completed": True},
-    ])
+    ]
 
-    resp = client.get("/api/tasks")
-    assert resp.status_code == 200
-    assert resp.get_json()["count"] == 2
+    with patch("app.main.tasks_db", fake_db):
+        resp = client.get("/api/tasks")
+        assert resp.status_code == 200
+        assert resp.get_json()["count"] == 2
 
 
-@patch("app.main.tasks_db", new_callable=lambda: list)
-def test_get_single_fake_task(mock_db, client):
+def test_get_single_fake_task(client):
     """Récupérer une tâche depuis un stockage mocké."""
-    mock_db.append(
-        {"id": 5, "title": "Mocké", "description": "test", "completed": True}
-    )
+    fake_db = [
+        {"id": 5, "title": "Mocké", "description": "test", "completed": True},
+    ]
 
-    resp = client.get("/api/tasks/5")
-    assert resp.status_code == 200
-    assert resp.get_json()["title"] == "Mocké"
-    assert resp.get_json()["completed"] is True
+    with patch("app.main.tasks_db", fake_db):
+        resp = client.get("/api/tasks/5")
+        assert resp.status_code == 200
+        assert resp.get_json()["title"] == "Mocké"
+        assert resp.get_json()["completed"] is True
