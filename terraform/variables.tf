@@ -7,13 +7,13 @@ variable "project_name" {
 variable "location" {
   description = "Région Azure"
   type        = string
-  default     = "West Europe"
+  default     = "swedencentral"
 }
 
 variable "vm_size" {
   description = "Taille de la VM"
   type        = string
-  default     = "Standard_B2s" # 2 vCPU, 4 Go RAM — compatible compte étudiant
+  default     = "Standard_B2ls_v2"
 }
 
 variable "admin_username" {

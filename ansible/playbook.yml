@@ -6,7 +6,7 @@
   vars:
     ghcr_user: "OWNER"                              # à surcharger via -e
     ghcr_token: ""                                   # optionnel (image publique)
-    app_image: "ghcr.io/{{ ghcr_user }}/devops-taskmanager:latest"
+    app_image: "ghcr.io/{{ ghcr_user }}/usine-logiciel:latest"
     app_port: 5000
     grafana_port: 3000
     prometheus_port: 9090

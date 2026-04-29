@@ -64,7 +64,7 @@
     chdir: /opt/app
 
 - name: Show running containers
-  shell: docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Ports}}"
+  shell: docker ps --format "table {{ '{{' }}.Names{{ '}}' }}\t{{ '{{' }}.Status{{ '}}' }}\t{{ '{{' }}.Ports{{ '}}' }}"
   register: containers
 
 - name: Display containers

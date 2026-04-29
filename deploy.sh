@@ -22,8 +22,7 @@ fi
 info "Subscription : $(az account show --query name -o tsv)"
 
 # ── Variables ──
-read -rp "GitHub username (pour GHCR) : " GHCR_USER
-read -rsp "GitHub PAT read:packages (Entrée si image publique) : " GHCR_TOKEN; echo
+GHCR_USER="Brendan-bx"
 read -rp "Mot de passe Grafana admin [admin123] : " GRAFANA_PASS
 GRAFANA_PASS=${GRAFANA_PASS:-admin123}
 
@@ -42,8 +41,7 @@ info "VM créée : $VM_IP"
 # ── 2. Attente SSH ──
 info "Étape 2/3 — Attente de la VM..."
 for i in $(seq 1 20); do
-  if ssh -i terraform/ssh_key.pem -o StrictHostKeyChecking=no \
-       -o ConnectTimeout=10 "${ADMIN_USER}@${VM_IP}" "echo ok" &>/dev/null; then
+  if ssh -i terraform/ssh_key.pem -o StrictHostKeyChecking=no -o ConnectTimeout=10 "${ADMIN_USER}@${VM_IP}" "echo ok" &>/dev/null; then
     break
   fi
   warn "Tentative SSH $i/20..."
@@ -59,7 +57,6 @@ ${VM_IP} ansible_user=${ADMIN_USER} ansible_ssh_private_key_file=../terraform/ss
 EOF
 
 EXTRA=("ghcr_user=${GHCR_USER}" "grafana_admin_password=${GRAFANA_PASS}")
-[[ -n "${GHCR_TOKEN}" ]] && EXTRA+=("ghcr_token=${GHCR_TOKEN}")
 
 cd ansible
 ansible-playbook -i inventory.ini playbook.yml -e "${EXTRA[*]}"
