@@ -1,4 +1,4 @@
-# 🚀 DevOps Task Manager
+# DevOps Task Manager
 
 API Flask de gestion de tâches, déployée sur Azure VM avec une pipeline
 CI/CD complète, du monitoring et de l'Infrastructure-as-Code.
@@ -70,17 +70,6 @@ git push origin main --tags
 
 ---
 
-## Répartition du travail (4 membres)
-
-| Membre   | Responsabilités                              |
-|----------|----------------------------------------------|
-| Membre 1 | Application Flask + Tests + Dockerfile       |
-| Membre 2 | CI/CD GitHub Actions + SonarCloud            |
-| Membre 3 | Monitoring (Prometheus, Promtail, Grafana)   |
-| Membre 4 | Terraform + Ansible + script de déploiement  |
-
----
-
 ## Démarrage rapide
 
 ### Pré-requis
@@ -109,10 +98,14 @@ flake8 app/ tests/
 
 ### Déploiement Azure
 
+Il faut d'abord initialisé le projet sur azure via deploy.sh
+
 ```bash
 az login
 ./deploy.sh
 ```
+
+Une fois validé la pipeline cd mettra à jour à chaque lancement
 
 ---
 
